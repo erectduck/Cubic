@@ -31,17 +31,31 @@ dpkg -i vscode.deb || apt --fix-broken install -y
 rm vscode.deb
 
 # 6. Menerapkan Wallpaper Desktop dan Layar Kunci (Login/Sleep)
-cp wallpaper.png /usr/share/backgrounds/
-cp login.png /usr/share/backgrounds/
+# cp wallpaper.png /usr/share/backgrounds/
+# cp login.png /usr/share/backgrounds/
+# mkdir -p /usr/share/glib-2.0/schemas/
+# cat <<EOF > /usr/share/glib-2.0/schemas/99-custom-settings.gschema.override
+# [org.gnome.desktop.background]
+# picture-uri='file:///usr/share/backgrounds/wallpaper.png'
+# picture-uri-dark='file:///usr/share/backgrounds/wallpaper.png'
+
+# [org.gnome.desktop.screensaver]
+# picture-uri='file:///usr/share/backgrounds/login.png'
+# picture-uri-dark='file:///usr/share/backgrounds/login.png'
+# EOF
+# glib-compile-schemas /usr/share/glib-2.0/schemas/
+
+# 6. Menerapkan Wallpaper Desktop dan Layar Kunci (Login/Sleep)(baru)
+cp desktop.png /usr/share/backgrounds/
 mkdir -p /usr/share/glib-2.0/schemas/
 cat <<EOF > /usr/share/glib-2.0/schemas/99-custom-settings.gschema.override
 [org.gnome.desktop.background]
-picture-uri='file:///usr/share/backgrounds/wallpaper.png'
-picture-uri-dark='file:///usr/share/backgrounds/wallpaper.png'
+picture-uri='file:///usr/share/backgrounds/desktop.png'
+picture-uri-dark='file:///usr/share/backgrounds/desktop.png'
 
 [org.gnome.desktop.screensaver]
-picture-uri='file:///usr/share/backgrounds/login.png'
-picture-uri-dark='file:///usr/share/backgrounds/login.png'
+picture-uri='file:///usr/share/backgrounds/desktop.png'
+picture-uri-dark='file:///usr/share/backgrounds/desktop.png'
 EOF
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
@@ -50,7 +64,7 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 # cp logo-kustom.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
 # update-initramfs -u
 
-# 7. Menerapkan Logo Booting Kustom
+# 7. Menerapkan Logo Booting Kustom(baru)
 # cp logo.png /usr/share/plymouth/themes/spinner/watermark.png
 cp logo.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
 update-initramfs -u
