@@ -51,7 +51,7 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 # update-initramfs -u
 
 # 7. Menerapkan Logo Booting Kustom
-cp logo.png /usr/share/plymouth/themes/spinner/watermark.png
+# cp logo.png /usr/share/plymouth/themes/spinner/watermark.png
 cp logo.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
 update-initramfs -u
 
