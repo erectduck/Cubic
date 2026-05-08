@@ -46,8 +46,13 @@ EOF
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 # 7. Menerapkan Logo Booting Kustom
-cp logo-kustom.png /usr/share/plymouth/themes/spinner/watermark.png
-cp logo-kustom.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
+# cp logo-kustom.png /usr/share/plymouth/themes/spinner/watermark.png
+# cp logo-kustom.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
+# update-initramfs -u
+
+# 7. Menerapkan Logo Booting Kustom
+cp logo.png /usr/share/plymouth/themes/spinner/watermark.png
+cp logo.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
 update-initramfs -u
 
 # 8. Cleanup
