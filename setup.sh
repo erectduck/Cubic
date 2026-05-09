@@ -45,29 +45,6 @@ rm vscode.deb
 #EOF
 #glib-compile-schemas /usr/share/glib-2.0/schemas/
 
-# 6. Menerapkan Wallpaper menggunakan Dconf Database
-cp coolshi.png /usr/share/backgrounds/
-chmod 644 /usr/share/backgrounds/coolshi.png
-
-# Membuat profil untuk user agar membaca database lokal
-mkdir -p /etc/dconf/profile
-echo -e "user\ndb/local" > /etc/dconf/profile/user
-
-# Membuat database konfigurasi wallpaper
-mkdir -p /etc/dconf/db/local.d
-cat <<EOF > /etc/dconf/db/local.d/00-wallpaper
-[org/gnome/desktop/background]
-picture-uri='file:///usr/share/backgrounds/coolshi.png'
-picture-uri-dark='file:///usr/share/backgrounds/coolshi.png'
-
-[org/gnome/desktop/screensaver]
-picture-uri='file:///usr/share/backgrounds/coolshi.png'
-picture-uri-dark='file:///usr/share/backgrounds/coolshi.png'
-EOF
-
-# Terapkan pembaruan database dconf
-dconf update
-
 # 7. Menerapkan Logo Booting Kustom
 cp waltuhmark.png /usr/share/plymouth/themes/spinner/watermark.png
 cp logo.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
