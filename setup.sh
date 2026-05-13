@@ -51,7 +51,7 @@ mkdir -p /usr/share/themes
 
 # Ekstrak file mentah tema langsung ke direktori sistem
 # PENTING: Ganti "nama-file-tema.tar.xz" dengan nama file asli yang kamu upload ke GitHub
-tar -xf nama-file-tema.tar.xz -C /usr/share/themes/
+tar -xf Orchis.tar.xz -C /usr/share/themes/
 
 # Terapkan tema varian Orchis-Dark dan aktifkan mode gelap
 mkdir -p /usr/share/glib-2.0/schemas/
