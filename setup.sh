@@ -12,7 +12,7 @@ apt update
 apt install -y p7zip-full p7zip-rar zip unzip
 apt install -y cups printer-driver-all
 # Mengganti wireless-tools dengan paket jaringan modern
-apt install -y network-manager-gnome iw wpasupplicant
+#apt install -y network-manager-gnome iw wpasupplicant
 
 # 3. Multimedia & Office (LibreOffice)
 apt install -y vlc libreoffice
@@ -44,6 +44,23 @@ rm vscode.deb
 #picture-uri-dark='file:///usr/share/backgrounds/login.png'
 #EOF
 #glib-compile-schemas /usr/share/glib-2.0/schemas/
+
+# 6. Mengubah Tema GTK (Ekstrak dari file tar.xz)
+# Buat folder penampungan tema jika belum ada
+mkdir -p /usr/share/themes
+
+# Ekstrak file mentah tema langsung ke direktori sistem
+# PENTING: Ganti "nama-file-tema.tar.xz" dengan nama file asli yang kamu upload ke GitHub
+tar -xf nama-file-tema.tar.xz -C /usr/share/themes/
+
+# Terapkan tema varian Orchis-Dark dan aktifkan mode gelap
+mkdir -p /usr/share/glib-2.0/schemas/
+cat <<EOF > /usr/share/glib-2.0/schemas/99-custom-theme.gschema.override
+[org.gnome.desktop.interface]
+gtk-theme='Orchis-Dark'
+color-scheme='prefer-dark'
+EOF
+glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 # 7. Menerapkan Logo Booting Kustom
 cp waltuhmark.png /usr/share/plymouth/themes/spinner/watermark.png
