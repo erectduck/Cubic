@@ -50,10 +50,9 @@ rm vscode.deb
 mkdir -p /usr/share/themes
 
 # Ekstrak file mentah tema langsung ke direktori sistem
-# PENTING: Ganti "nama-file-tema.tar.xz" dengan nama file asli yang kamu upload ke GitHub
 tar -xf Orchis.tar.xz -C /usr/share/themes/
 
-# Terapkan tema varian Orchis-Dark dan aktifkan mode gelap
+# Terapkan tema varian Orchis-Dark dan mode gelap melalui skema GNOME (Untuk aplikasi lama)
 mkdir -p /usr/share/glib-2.0/schemas/
 cat <<EOF > /usr/share/glib-2.0/schemas/99-custom-theme.gschema.override
 [org.gnome.desktop.interface]
@@ -61,6 +60,13 @@ gtk-theme='Orchis-Dark'
 color-scheme='prefer-dark'
 EOF
 glib-compile-schemas /usr/share/glib-2.0/schemas/
+
+# Memaksa aplikasi modern (GTK4/Libadwaita) memakai Orchis-Dark untuk setiap pengguna baru
+mkdir -p /etc/skel/.config/gtk-4.0
+cp -rf /usr/share/themes/Orchis-Dark/gtk-4.0/* /etc/skel/.config/gtk-4.0/
+ln -sf /usr/share/themes/Orchis-Dark/gtk-4.0/assets /etc/skel/.config/gtk-4.0/assets
+ln -sf /usr/share/themes/Orchis-Dark/gtk-4.0/gtk.css /etc/skel/.config/gtk-4.0/gtk.css
+ln -sf /usr/share/themes/Orchis-Dark/gtk-4.0/gtk-dark.css /etc/skel/.config/gtk-4.0/gtk-dark.css
 
 # 7. Menerapkan Logo Booting Kustom
 cp waltuhmark.png /usr/share/plymouth/themes/spinner/watermark.png
