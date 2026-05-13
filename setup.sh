@@ -18,8 +18,8 @@ apt install -y cups printer-driver-all
 apt install -y vlc libreoffice
 
 # 4. Programming (Python, Default JDK Stable, NetBeans)
-apt install -y python3 python3-pip python3-venv
-apt install -y default-jdk
+#apt install -y python3 python3-pip python3-venv
+#apt install -y default-jdk
 # Unduh dan Install Apache NetBeans secara langsung
 wget -qO netbeans.deb "https://archive.apache.org/dist/netbeans/netbeans-installers/21/apache-netbeans_21-1_all.deb"
 dpkg -i netbeans.deb || apt --fix-broken install -y
