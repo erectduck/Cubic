@@ -1,79 +1,84 @@
 #!/bin/bash
 
-# Mencegah interaksi "Yes/No"
+# Mencegah interaksi "Yes/No" selama instalasi
 export DEBIAN_FRONTEND=noninteractive
 
-# 1. Update repositori dan pastikan repositori 'universe' aktif
+# 1. Update Repositori
+# -----------------------------------------------------------------------------
 apt update
 add-apt-repository universe -y
 apt update
 
-# 2. Utilitas, Jaringan, Printer, & Arsip
-apt install -y p7zip-full p7zip-rar zip unzip
-apt install -y cups printer-driver-all
-# Mengganti wireless-tools dengan paket jaringan modern
-#apt install -y network-manager-gnome iw wpasupplicant
+# 2. Utilitas Arsip & Printer
+# -----------------------------------------------------------------------------
+apt install -y \
+    p7zip-full \
+    p7zip-rar \
+    zip \
+    unzip \
+    cups \
+    printer-driver-all
 
-# 3. Multimedia & Office (LibreOffice)
-apt install -y vlc libreoffice
+# 3. Multimedia & Office
+# -----------------------------------------------------------------------------
+apt install -y \
+    vlc \
+    libreoffice
 
-# 4. Programming (Python, Default JDK Stable, NetBeans)
-apt install -y python3 python3-pip python3-venv
+# 4. Programming — Python, JDK, NetBeans, VS Code
+# -----------------------------------------------------------------------------
+
+# Python
+apt install -y \
+    python3 \
+    python3-pip \
+    python3-venv
+
+# Java (JDK stable)
 apt install -y default-jdk
-# Unduh dan Install Apache NetBeans secara langsung
+
+# Apache NetBeans 21
 wget -qO netbeans.deb "https://archive.apache.org/dist/netbeans/netbeans-installers/21/apache-netbeans_21-1_all.deb"
 dpkg -i netbeans.deb || apt --fix-broken install -y
 rm netbeans.deb
 
-# 5. Visual Studio Code (Via .deb langsung dari Microsoft)
+# Visual Studio Code
 wget -qO vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
 dpkg -i vscode.deb || apt --fix-broken install -y
 rm vscode.deb
 
-# 6. Menerapkan Wallpaper Desktop dan Layar Kunci (Login/Sleep)
-#cp wallpaper.png /usr/share/backgrounds/
-#cp login.png /usr/share/backgrounds/
-#mkdir -p /usr/share/glib-2.0/schemas/
-#cat <<EOF > /usr/share/glib-2.0/schemas/99-custom-settings.gschema.override
-#[org.gnome.desktop.background]
-#picture-uri='file:///usr/share/backgrounds/wallpaper.png'
-#picture-uri-dark='file:///usr/share/backgrounds/wallpaper.png'
+# 5. Tema Desktop — Orchis-Dark
+# -----------------------------------------------------------------------------
 
-#[org.gnome.desktop.screensaver]
-#picture-uri='file:///usr/share/backgrounds/login.png'
-#picture-uri-dark='file:///usr/share/backgrounds/login.png'
-#EOF
-#glib-compile-schemas /usr/share/glib-2.0/schemas/
-
-# 6. Mengubah Tema GTK (Ekstrak dari file tar.xz)
-# Buat folder penampungan tema jika belum ada
-mkdir -p /usr/share/themes
-
-# Ekstrak file mentah tema langsung ke direktori sistem
+# Ekstrak semua varian tema ke direktori sistem
 tar -xf Orchis.tar.xz -C /usr/share/themes/
 
-# Terapkan tema varian Orchis-Dark dan mode gelap melalui skema GNOME (Untuk aplikasi lama)
-mkdir -p /usr/share/glib-2.0/schemas/
-cat <<EOF > /usr/share/glib-2.0/schemas/99-custom-theme.gschema.override
-[org.gnome.desktop.interface]
+# Buat dconf profile agar settings terapply ke semua user baru
+mkdir -p /etc/dconf/profile/
+cat <<EOF > /etc/dconf/profile/user
+user-db:user
+system-db:local
+EOF
+
+# Terapkan Orchis-Dark sebagai tema GNOME default
+mkdir -p /etc/dconf/db/local.d/
+cat <<EOF > /etc/dconf/db/local.d/00-custom-settings
+[org/gnome/desktop/interface]
 gtk-theme='Orchis-Dark'
 color-scheme='prefer-dark'
 EOF
-glib-compile-schemas /usr/share/glib-2.0/schemas/
 
-# Memaksa aplikasi modern (GTK4/Libadwaita) memakai Orchis-Dark untuk setiap pengguna baru
-mkdir -p /etc/skel/.config/gtk-4.0
-cp -rf /usr/share/themes/Orchis-Dark/gtk-4.0/* /etc/skel/.config/gtk-4.0/
-ln -sf /usr/share/themes/Orchis-Dark/gtk-4.0/assets /etc/skel/.config/gtk-4.0/assets
-ln -sf /usr/share/themes/Orchis-Dark/gtk-4.0/gtk.css /etc/skel/.config/gtk-4.0/gtk.css
-ln -sf /usr/share/themes/Orchis-Dark/gtk-4.0/gtk-dark.css /etc/skel/.config/gtk-4.0/gtk-dark.css
+# Compile dconf database
+dconf update
 
-# 7. Menerapkan Logo Booting Kustom
+# 6. Boot Splash — Plymouth Kustom
+# -----------------------------------------------------------------------------
 cp waltuhmark.png /usr/share/plymouth/themes/spinner/watermark.png
 cp logo.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
 update-initramfs -u
 
-# 8. Cleanup
+# 7. Cleanup
+# -----------------------------------------------------------------------------
 apt autoremove -y
 apt clean
 rm -rf /var/lib/apt/lists/*
