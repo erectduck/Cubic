@@ -50,26 +50,25 @@ rm vscode.deb
 # 5. Tema Desktop — Orchis-Dark
 # -----------------------------------------------------------------------------
 
-# Ekstrak semua varian tema ke direktori sistem
-tar -xf Orchis.tar.xz -C /usr/share/themes/
+# Install dependency tema Orchis
+apt install -y gtk2-engines-murrine sassc git
 
-# Buat dconf profile agar settings terapply ke semua user baru
-mkdir -p /etc/dconf/profile/
-cat <<EOF > /etc/dconf/profile/user
-user-db:user
-system-db:local
-EOF
+# Clone repo Orchis dan install hanya varian Dark ke system-wide
+git clone --depth=1 https://github.com/vinceliuice/Orchis-theme.git /tmp/Orchis-theme
+/tmp/Orchis-theme/install.sh -d /usr/share/themes/ -c dark
+rm -rf /tmp/Orchis-theme
 
-# Terapkan Orchis-Dark sebagai tema GNOME default
-mkdir -p /etc/dconf/db/local.d/
-cat <<EOF > /etc/dconf/db/local.d/00-custom-settings
-[org/gnome/desktop/interface]
+# Terapkan Orchis-Dark sebagai tema default via gschema override
+# (Cara resmi Cubic — dimuat setelah semua konfigurasi dconf lainnya)
+mkdir -p /usr/share/glib-2.0/schemas/
+cat <<EOF > /usr/share/glib-2.0/schemas/90_custom-theme.gschema.override
+[org.gnome.desktop.interface]
 gtk-theme='Orchis-Dark'
 color-scheme='prefer-dark'
 EOF
 
-# Compile dconf database
-dconf update
+# Compile schema — bisa dijalankan di chroot tanpa D-Bus
+glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 # 6. Boot Splash — Plymouth Kustom
 # -----------------------------------------------------------------------------
