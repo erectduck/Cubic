@@ -59,52 +59,6 @@ rm vscode.deb
 # 5. Tema Desktop — WhiteSur-Dark
 # -----------------------------------------------------------------------------
 
-# Install Gnome Tweaks dan User Theme extension
-apt install -y \
-    gnome-tweaks \
-    gnome-shell-extension-user-theme
-
-# Ekstrak tema GTK ke direktori sistem
-tar -xf WhiteSur-Dark.tar.xz -C /usr/share/themes/
-
-# Ekstrak icon theme ke direktori sistem
-tar -xf 01-WhiteSur.tar.xz -C /usr/share/icons/
-
-# Buat autostart script yang menerapkan tema saat user login pertama kali
-cat <<'EOF' > /usr/local/bin/apply-whitesur-theme.sh
-#!/bin/bash
-# Tunggu GNOME Shell siap
-sleep 3
-
-# Aktifkan User Theme extension
-gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
-
-# Terapkan WhiteSur-Dark untuk GTK3, shell, icon, dan color scheme
-gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'
-gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
-
-# Terapkan WhiteSur-Dark ke GTK4/libadwaita via symlink
-mkdir -p ~/.config/gtk-4.0/
-ln -sf /usr/share/themes/WhiteSur-Dark/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk.css
-ln -sf /usr/share/themes/WhiteSur-Dark/gtk-4.0/gtk-dark.css ~/.config/gtk-4.0/gtk-dark.css
-
-# Hapus autostart setelah tema terapply agar tidak jalan setiap login
-rm -f ~/.config/autostart/apply-whitesur-theme.desktop
-EOF
-chmod +x /usr/local/bin/apply-whitesur-theme.sh
-
-# Taruh autostart entry di skel agar terapply ke semua user baru
-mkdir -p /etc/skel/.config/autostart/
-cat <<'EOF' > /etc/skel/.config/autostart/apply-whitesur-theme.desktop
-[Desktop Entry]
-Type=Application
-Name=Apply WhiteSur Theme
-Exec=/usr/local/bin/apply-whitesur-theme.sh
-X-GNOME-Autostart-enabled=true
-EOF
-
 # -----------------------------------------------------------------------------
 # 6. Boot Splash — Plymouth Kustom
 # -----------------------------------------------------------------------------
