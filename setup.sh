@@ -1,14 +1,20 @@
 #!/bin/bash
+# =============================================================================
+# Custom Ubuntu 25 Setup Script — via Cubic
+# Dijalankan di dalam chroot environment Cubic
+# =============================================================================
 
 # Mencegah interaksi "Yes/No" selama instalasi
 export DEBIAN_FRONTEND=noninteractive
 
+# -----------------------------------------------------------------------------
 # 1. Update Repositori
 # -----------------------------------------------------------------------------
 apt update
 add-apt-repository universe -y
 apt update
 
+# -----------------------------------------------------------------------------
 # 2. Utilitas Arsip & Printer
 # -----------------------------------------------------------------------------
 apt install -y \
@@ -19,12 +25,14 @@ apt install -y \
     cups \
     printer-driver-all
 
+# -----------------------------------------------------------------------------
 # 3. Multimedia & Office
 # -----------------------------------------------------------------------------
 apt install -y \
     vlc \
     libreoffice
 
+# -----------------------------------------------------------------------------
 # 4. Programming — Python, JDK, NetBeans, VS Code
 # -----------------------------------------------------------------------------
 
@@ -47,50 +55,64 @@ wget -qO vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=
 dpkg -i vscode.deb || apt --fix-broken install -y
 rm vscode.deb
 
-# 5. Tema Desktop — Graphite Dark
+# -----------------------------------------------------------------------------
+# 5. Tema Desktop — WhiteSur-Dark
 # -----------------------------------------------------------------------------
 
-# Install dependency tema Graphite
+# Install Gnome Tweaks dan User Theme extension
 apt install -y \
-    gtk2-engines-murrine \
-    sassc \
-    git
+    gnome-tweaks \
+    gnome-shell-extension-user-theme
 
-# Clone repo Graphite (official dari vinceliuice)
-git clone --depth=1 https://github.com/vinceliuice/Graphite-gtk-theme.git /tmp/Graphite-theme
+# Ekstrak tema GTK ke direktori sistem
+tar -xf WhiteSur-Dark.tar.xz -C /usr/share/themes/
 
-# Install varian dark ke system-wide + aktifkan libadwaita support
-# Flag: -d system-wide, -c dark, -l libadwaita link
-/tmp/Graphite-theme/install.sh \
-    -d /usr/share/themes \
-    -c dark \
-    -l
+# Ekstrak icon theme ke direktori sistem
+tar -xf 01-WhiteSur.tar.xz -C /usr/share/icons/
 
-# Flag -l menulis gtk-4.0 config ke $HOME/.config/gtk-4.0 (yaitu /root/ di chroot)
-# Copy ke /etc/skel agar terapply ke semua user baru (hanya gtk-4.0, aman untuk installer)
-mkdir -p /etc/skel/.config/
-cp -r /root/.config/gtk-4.0 /etc/skel/.config/gtk-4.0
+# Buat autostart script yang menerapkan tema saat user login pertama kali
+cat <<'EOF' > /usr/local/bin/apply-whitesur-theme.sh
+#!/bin/bash
+# Tunggu GNOME Shell siap
+sleep 3
 
-# Bersihkan repo
-rm -rf /tmp/Graphite-theme
+# Aktifkan User Theme extension
+gnome-extensions enable user-theme@gnome-shell-extensions.gcampax.github.com
 
-# Terapkan Graphite-Dark sebagai tema default via gschema override (cara resmi Cubic)
-mkdir -p /usr/share/glib-2.0/schemas/
-cat <<EOF > /usr/share/glib-2.0/schemas/99_custom-theme.gschema.override
-[org.gnome.desktop.interface]
-gtk-theme='Graphite-Dark'
-color-scheme='prefer-dark'
+# Terapkan WhiteSur-Dark untuk GTK3, shell, icon, dan color scheme
+gsettings set org.gnome.desktop.interface gtk-theme 'WhiteSur-Dark'
+gsettings set org.gnome.desktop.interface icon-theme 'WhiteSur-dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.shell.extensions.user-theme name 'WhiteSur-Dark'
+
+# Terapkan WhiteSur-Dark ke GTK4/libadwaita via symlink
+mkdir -p ~/.config/gtk-4.0/
+ln -sf /usr/share/themes/WhiteSur-Dark/gtk-4.0/gtk.css ~/.config/gtk-4.0/gtk.css
+ln -sf /usr/share/themes/WhiteSur-Dark/gtk-4.0/gtk-dark.css ~/.config/gtk-4.0/gtk-dark.css
+
+# Hapus autostart setelah tema terapply agar tidak jalan setiap login
+rm -f ~/.config/autostart/apply-whitesur-theme.desktop
+EOF
+chmod +x /usr/local/bin/apply-whitesur-theme.sh
+
+# Taruh autostart entry di skel agar terapply ke semua user baru
+mkdir -p /etc/skel/.config/autostart/
+cat <<'EOF' > /etc/skel/.config/autostart/apply-whitesur-theme.desktop
+[Desktop Entry]
+Type=Application
+Name=Apply WhiteSur Theme
+Exec=/usr/local/bin/apply-whitesur-theme.sh
+X-GNOME-Autostart-enabled=true
 EOF
 
-# Compile schema
-glib-compile-schemas /usr/share/glib-2.0/schemas/
-
+# -----------------------------------------------------------------------------
 # 6. Boot Splash — Plymouth Kustom
 # -----------------------------------------------------------------------------
 cp waltuhmark.png /usr/share/plymouth/themes/spinner/watermark.png
 cp logo.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
 update-initramfs -u
 
+# -----------------------------------------------------------------------------
 # 7. Cleanup
 # -----------------------------------------------------------------------------
 apt autoremove -y
