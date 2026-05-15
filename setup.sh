@@ -47,27 +47,42 @@ wget -qO vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=
 dpkg -i vscode.deb || apt --fix-broken install -y
 rm vscode.deb
 
-# 5. Tema Desktop — Orchis-Dark
+# 5. Tema Desktop — Graphite Dark
 # -----------------------------------------------------------------------------
 
-# Install dependency tema Orchis
-apt install -y gtk2-engines-murrine sassc git
+# Install dependency tema Graphite
+apt install -y \
+    gtk2-engines-murrine \
+    sassc \
+    git
 
-# Clone repo Orchis dan install hanya varian Dark ke system-wide
-git clone --depth=1 https://github.com/vinceliuice/Orchis-theme.git /tmp/Orchis-theme
-/tmp/Orchis-theme/install.sh -d /usr/share/themes/ -c dark
-rm -rf /tmp/Orchis-theme
+# Clone repo Graphite (official dari vinceliuice)
+git clone --depth=1 https://github.com/vinceliuice/Graphite-gtk-theme.git /tmp/Graphite-theme
 
-# Terapkan Orchis-Dark sebagai tema default via gschema override
-# (Cara resmi Cubic — dimuat setelah semua konfigurasi dconf lainnya)
+# Install varian dark ke system-wide + aktifkan libadwaita support
+# Flag: -d system-wide, -c dark, -l libadwaita link
+/tmp/Graphite-theme/install.sh \
+    -d /usr/share/themes \
+    -c dark \
+    -l
+
+# Flag -l menulis gtk-4.0 config ke $HOME/.config/gtk-4.0 (yaitu /root/ di chroot)
+# Copy ke /etc/skel agar terapply ke semua user baru (hanya gtk-4.0, aman untuk installer)
+mkdir -p /etc/skel/.config/
+cp -r /root/.config/gtk-4.0 /etc/skel/.config/gtk-4.0
+
+# Bersihkan repo
+rm -rf /tmp/Graphite-theme
+
+# Terapkan Graphite-Dark sebagai tema default via gschema override (cara resmi Cubic)
 mkdir -p /usr/share/glib-2.0/schemas/
-cat <<EOF > /usr/share/glib-2.0/schemas/90_custom-theme.gschema.override
+cat <<EOF > /usr/share/glib-2.0/schemas/99_custom-theme.gschema.override
 [org.gnome.desktop.interface]
-gtk-theme='Orchis-Dark'
+gtk-theme='Graphite-Dark'
 color-scheme='prefer-dark'
 EOF
 
-# Compile schema — bisa dijalankan di chroot tanpa D-Bus
+# Compile schema
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 # 6. Boot Splash — Plymouth Kustom
