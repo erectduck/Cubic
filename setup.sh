@@ -7,6 +7,9 @@
 # Mencegah interaksi "Yes/No" selama instalasi
 export DEBIAN_FRONTEND=noninteractive
 
+# Pre-accept lisensi Microsoft Font untuk ubuntu-restricted-extras
+echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections
+
 # -----------------------------------------------------------------------------
 # 1. Update Repositori
 # -----------------------------------------------------------------------------
@@ -15,21 +18,22 @@ add-apt-repository universe -y
 apt update
 
 # -----------------------------------------------------------------------------
-# 2. Utilitas Arsip & Printer
+# 2. Utilitas Arsip, Printer & Ekstra
 # -----------------------------------------------------------------------------
 apt install -y \
     p7zip-full \
     p7zip-rar \
-    zip \
-    unzip \
     cups \
-    printer-driver-all
+    fastfetch \
+    bleachbit \
 
 # -----------------------------------------------------------------------------
 # 3. Multimedia & Office
 # -----------------------------------------------------------------------------
 apt install -y \
+    ubuntu-restricted-extras \
     vlc \
+    gimp \
     libreoffice
 
 # -----------------------------------------------------------------------------
@@ -56,8 +60,15 @@ dpkg -i vscode.deb || apt --fix-broken install -y
 rm vscode.deb
 
 # -----------------------------------------------------------------------------
-# 5. Tema Desktop — WhiteSur-Dark
+# 5. Wallpaper — Desktop, Lock screen
 # -----------------------------------------------------------------------------
+
+# Desktop wallpaper (light & dark mode)
+cp bground.png /usr/share/backgrounds/warty-final-ubuntu.png
+cp bground.png /usr/share/backgrounds/ubuntu-wallpaper-d.png
+
+# Lock/login screen
+cp Lscreen.png /usr/share/backgrounds/ubuntu-default-greyscale-wallpaper.png
 
 # -----------------------------------------------------------------------------
 # 6. Boot Splash — Plymouth Kustom
