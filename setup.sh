@@ -74,7 +74,7 @@ cp Lscreen.png /usr/share/backgrounds/ubuntu-default-greyscale-wallpaper.png
 # 6. Boot Splash — Plymouth Kustom
 # -----------------------------------------------------------------------------
 cp waltuhmark.png /usr/share/plymouth/themes/spinner/watermark.png
-cp logo.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
+cp loqo.png /usr/share/plymouth/themes/spinner/bgrt-fallback.png
 update-initramfs -u
 
 # -----------------------------------------------------------------------------
