@@ -47,15 +47,8 @@ apt install -y \
     drawing
 
 # -----------------------------------------------------------------------------
-# 4. Komunikasi & Hiburan — Spotify, Discord, Zoom, Chromium
+# 4. Komunikasi & Hiburan — Discord, Zoom, Chromium
 # -----------------------------------------------------------------------------
-
-# DIINSTALL BARU: spotify-client (via repository resmi)
-mkdir -p /etc/apt/keyrings
-curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | tee /etc/apt/keyrings/spotify.gpg > /dev/null
-echo "deb [signed-by=/etc/apt/keyrings/spotify.gpg] http://repository.spotify.com stable non-free" | tee /etc/apt/sources.list.d/spotify.list
-apt update
-apt install -y spotify-client
 
 # DIINSTALL BARU: discord (via .deb resmi)
 wget -qO discord.deb "https://discord.com/api/download?platform=linux&format=deb"
