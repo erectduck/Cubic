@@ -50,10 +50,12 @@ apt install -y \
 # 4. Komunikasi & Hiburan — Spotify, Discord, Zoom, Chromium
 # -----------------------------------------------------------------------------
 
-# DIINSTALL BARU: spotify-client (via .deb resmi)
-wget -qO spotify.deb "https://repository.spotify.com/pool/non-free/s/spotify-client/spotify-client_latest_amd64.deb"
-dpkg -i spotify.deb || apt --fix-broken install -y
-rm spotify.deb
+# DIINSTALL BARU: spotify-client (via repository resmi)
+mkdir -p /etc/apt/keyrings
+curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | tee /etc/apt/keyrings/spotify.gpg > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/spotify.gpg] http://repository.spotify.com stable non-free" | tee /etc/apt/sources.list.d/spotify.list
+apt update
+apt install -y spotify-client
 
 # DIINSTALL BARU: discord (via .deb resmi)
 wget -qO discord.deb "https://discord.com/api/download?platform=linux&format=deb"
