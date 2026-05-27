@@ -36,7 +36,7 @@ apt install -y \
 # 3. Multimedia & Office
 # -----------------------------------------------------------------------------
 # DIINSTALL BARU: ubuntu-restricted-extras, vlc, gimp, kdenlive,
-#                 libreoffice, drawing
+#                 libreoffice, drawing, pdfarranger
 # DIUPDATE: libreoffice (sudah ada versi lama di Ubuntu default)
 apt install -y \
     ubuntu-restricted-extras \
@@ -44,7 +44,8 @@ apt install -y \
     gimp \
     kdenlive \
     libreoffice \
-    drawing
+    drawing \
+    pdfarranger
 
 # -----------------------------------------------------------------------------
 # 4. Komunikasi & Hiburan — Discord, Zoom, Chromium
