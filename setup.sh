@@ -22,11 +22,9 @@ apt update
 # -----------------------------------------------------------------------------
 # DIINSTALL BARU: p7zip-full, p7zip-rar, fastfetch, bleachbit,
 #                 timeshift, fonts-noto
-# DIUPDATE: cups (sudah ada di Ubuntu default sebagai sistem printing)
 apt install -y \
     p7zip-full \
     p7zip-rar \
-    cups \
     fastfetch \
     bleachbit \
     timeshift \
@@ -69,10 +67,8 @@ apt install -y chromium-browser
 # 5. Programming — Python, JDK, NetBeans, VS Code
 # -----------------------------------------------------------------------------
 
-# DIUPDATE: python3 (sudah ada di Ubuntu default)
 # DIINSTALL BARU: python3-pip, python3-venv
 apt install -y \
-    python3 \
     python3-pip \
     python3-venv
 
