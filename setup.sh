@@ -54,8 +54,9 @@ apt install -y \
 wget -qO discord.deb "https://discord.com/api/download?platform=linux&format=deb"
 dpkg -i discord.deb || apt --fix-broken install -y
 rm discord.deb
-
+ 
 # DIINSTALL BARU: zoom (via .deb resmi)
+apt install -y libxcb-xtest0
 wget -qO zoom.deb "https://zoom.us/client/latest/zoom_amd64.deb"
 dpkg -i zoom.deb || apt --fix-broken install -y
 rm zoom.deb
