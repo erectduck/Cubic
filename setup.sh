@@ -46,7 +46,7 @@ apt install -y \
     pdfarranger
 
 # -----------------------------------------------------------------------------
-# 4. Komunikasi & Hiburan — Discord, Zoom, Chromium
+# 4. Komunikasi & Hiburan — Discord & Zoom
 # -----------------------------------------------------------------------------
 
 # DIINSTALL BARU: discord (via .deb resmi)
@@ -59,9 +59,6 @@ apt install -y libxcb-xtest0
 wget -qO zoom.deb "https://zoom.us/client/latest/zoom_amd64.deb"
 dpkg -i zoom.deb || apt --fix-broken install -y
 rm zoom.deb
-
-# DIINSTALL BARU: chromium-browser
-apt install -y chromium-browser
 
 # -----------------------------------------------------------------------------
 # 5. Programming — Python, JDK, NetBeans, VS Code
