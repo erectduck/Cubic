@@ -23,11 +23,7 @@ apt update
 # DIINSTALL BARU: p7zip-full, p7zip-rar, fastfetch, bleachbit,
 #                 timeshift, fonts-noto
 apt install -y \
-    p7zip-full \
-    p7zip-rar \
-    fastfetch \
     bleachbit \
-    timeshift \
     fonts-noto
 
 # -----------------------------------------------------------------------------
@@ -42,8 +38,6 @@ apt install -y \
     gimp \
     kdenlive \
     libreoffice \
-    drawing \
-    pdfarranger
 
 # -----------------------------------------------------------------------------
 # 4. Komunikasi & Hiburan — Discord & Zoom
@@ -71,11 +65,6 @@ apt install -y \
 
 # DIINSTALL BARU: default-jdk
 apt install -y default-jdk
-
-# DIINSTALL BARU: Apache NetBeans 29 (via .deb dari codelerity)
-wget -qO netbeans.deb "https://github.com/codelerity/netbeans-packages/releases/download/v29-build1/apache-netbeans_29-1_amd64.deb"
-dpkg -i netbeans.deb || apt --fix-broken install -y
-rm netbeans.deb
 
 # DIINSTALL BARU: Visual Studio Code (via .deb resmi Microsoft)
 wget -qO vscode.deb "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
